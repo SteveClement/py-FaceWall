@@ -1,0 +1,26 @@
+.header
+{
+color:black;
+font-size:47px;
+font-family:"Arial", Helvetica, sans-serif;
+}
+
+.norm
+{
+color:black;
+font-size:25px;
+font-family:"Arial", Helvetica, sans-serif;
+}
+
+.likes
+{
+color:#5a749f;
+font-size:100px;
+font-family:"Arial", Helvetica, sans-serif;
+}
+
+#likes {position: absolute;
+	top:320px;
+	right:20px;
+	left:20px;
+}
