@@ -1,6 +1,0 @@
-lpr -o landscape -o ppi=300 -o PageSize=w72h154 -o PrintQuality=Graphics /tmp/test.jpg 
-lpr -o landscape -o PageSize=w72h154 test.txt 
-lpr -o landscape -o ppi=300 -o PageSize=w154h286.1 -o PrintQuality=Graphics /tmp/95283473324.jpg 
-
-html2ps 
-http://user.it.uu.se/~jan/html2ps.html
