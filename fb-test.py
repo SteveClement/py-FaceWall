@@ -40,8 +40,8 @@ html = u"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 """
 
 # Parameters of your app and the id of the profile you want to mess with.
-FACEBOOK_APP_ID     = '321b8c0096dbe3545fe4fc0641acbeed'
-FACEBOOK_APP_SECRET = '1303b424fe0ef2a24343caac19b31f61'
+FACEBOOK_APP_ID     = ''
+FACEBOOK_APP_SECRET = ''
 
 # Trying to get an access token. Very awkward.
 oauth_args = dict(client_id     = FACEBOOK_APP_ID,
