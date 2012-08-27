@@ -23,15 +23,14 @@ Release notes
 
 * added config file support. 
 A config file must be named facebook.cfg and look like this:
-~~~ { }
-[facebook]
-app_id: myappid
-app_secret: mysupersecret
 
-[connection]
-proxy_host:
-proxy_port:
-
-[httpd]
-docroot:
-
+	[facebook]
+	app_id: myappid
+	app_secret: mysupersecret
+	
+	[connection]
+	proxy_host:
+	proxy_port:
+	
+	[httpd]
+	docroot:
