@@ -2,8 +2,7 @@
 # coding: utf-8
 
 import sys
-#sys.path.append("/Users/steve/Desktop/code/python-sdk/src/")
-sys.path.append("/home/steve/Desktop/code/python-sdk/src/")
+#sys.path.append("/home/steve/Desktop/code/python-sdk/src/")
 import facebook
 import urllib
 import urllib2
@@ -18,8 +17,11 @@ config = ConfigParser.ConfigParser()
 config.readfp(open('facebook.cfg'))
 app_id = config.get('facebook','app_id')
 app_secret = config.get('facebook','app_secret')
-proxy_host = config.get('connection','proxy_host')
-proxy_port = config.get('connection','proxy_port')
+try:
+	proxy_host = config.get('connection','proxy_host')
+	proxy_port = config.get('connection','proxy_port')
+except ConfigParser.NoOptionError:
+	proxy_host = ''
 docroot = config.get('httpd','docroot')
 
 def debug():
