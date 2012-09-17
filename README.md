@@ -11,6 +11,8 @@ Dependencies
 * [facebook-sdk](https://github.com/pythonforfacebook/facebook-sdk)
 * python-ConfigParser
 * python-urllib, python-urllib2
+* If Dymo Label Writer is used: wget http://global.dymo.com/img/compel/xKpID6d3hOi6UrMXDNF4k6IlSMSm3E_0.gz -O DLS-8.2SDK-Linux.tgz
+** CUPS
 
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=SteveClement&url=https://github.com/SteveClement/py-FaceWall&title=Python FaceBook Wall and Printer&language=en_GB&tags=github&category=software) 
