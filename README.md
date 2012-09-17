@@ -11,10 +11,11 @@ Dependencies
 * [facebook-sdk](https://github.com/pythonforfacebook/facebook-sdk)
 * python-ConfigParser
 * python-urllib, python-urllib2
-* If Dymo Label Writer is used: wget http://global.dymo.com/img/compel/xKpID6d3hOi6UrMXDNF4k6IlSMSm3E_0.gz -O 
+* If Dymo Label Writer is used: wget http://global.dymo.com/img/compel/xKpID6d3hOi6UrMXDNF4k6IlSMSm3E_0.gz -O dymo-cups-drivers-1.2.0.tar.gz OR wget http://www.dymo.com/media/Software/dymo-cups-drivers-1.2.0.tar.gz
 ** CUPS-dev (libcups2-dev libcupsimage2-dev)
 ** build-essential
 ** cups
+/!\ Make sure you apply the pach for the driver to avoid compile errors
 
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=SteveClement&url=https://github.com/SteveClement/py-FaceWall&title=Python FaceBook Wall and Printer&language=en_GB&tags=github&category=software) 
