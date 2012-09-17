@@ -2,16 +2,27 @@
 # coding: utf-8
 
 import sys
-#sys.path.append("/Users/steve/Desktop/code/python-sdk/src/")
-sys.path.append("/home/steve/Desktop/code/python-sdk/src/")
+#sys.path.append("/home/steve/Desktop/code/python-sdk/src/")
 import facebook
 import urllib
+import urllib2
 import urlparse
-import subprocess
 import random
 import os.path
 import hashlib
 import codecs
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.readfp(open('facebook.cfg'))
+app_id = config.get('facebook','app_id')
+app_secret = config.get('facebook','app_secret')
+try:
+	proxy_host = config.get('connection','proxy_host')
+	proxy_port = config.get('connection','proxy_port')
+except ConfigParser.NoOptionError:
+	proxy_host = ''
+docroot = config.get('httpd','docroot')
 
 def debug():
 	print '<!--'
@@ -39,25 +50,36 @@ html = u"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
   <br >
 """
 
-# Parameters of your app and the id of the profile you want to mess with.
-FACEBOOK_APP_ID     = ''
-FACEBOOK_APP_SECRET = ''
+def getAccessToken():
+	""" Trying to get an access token. Very awkward. """
+	oauth_url = 'https://graph.facebook.com/oauth/access_token?'
 
-# Trying to get an access token. Very awkward.
-oauth_args = dict(client_id     = FACEBOOK_APP_ID,
-                  client_secret = FACEBOOK_APP_SECRET,
-                  grant_type    = 'client_credentials')
-oauth_curl_cmd = ['curl',
-                  'https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(oauth_args)]
-oauth_response = subprocess.Popen(oauth_curl_cmd,
-                                  stdout = subprocess.PIPE,
-                                  stderr = subprocess.PIPE).communicate()[0]
+	oauth_args = {
+			'client_id' : app_id,
+			'client_secret' : app_secret,
+			'grant_type'	: 'client_credentials'
+		}
+	params = urllib.urlencode(oauth_args)
 
-try:
-    oauth_access_token = urlparse.parse_qs(str(oauth_response))['access_token'][0]
-except KeyError:
-    print('Unable to grab an access token!')
-    exit()
+	if proxy_host:
+		proxies = {'http' : '%s:%s' % (proxy_host,proxy_port)}
+		proxy_support = urllib2.ProxyHandler(proxies)
+		opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler(debuglevel=9))
+		# HMPF.. 106 connection timed out
+	else:
+		opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))	
+
+	urllib2.install_opener(opener)
+	req = urllib2.Request(oauth_url,params)
+	oauth_response = urllib2.urlopen(req).read()
+
+	try:
+	    return urlparse.parse_qs(str(oauth_response))['access_token'][0]
+	except KeyError:
+	    print('Unable to grab an access token!')
+	    exit()
+
+oauth_access_token = getAccessToken()
 
 facebook_graph = facebook.GraphAPI(oauth_access_token)
 
@@ -154,22 +176,6 @@ else:
 </body>
 </html>
 """
-	local_file = codecs.open('/usr/share/nginx/www/index.html', encoding='utf-8', mode="w")
+	local_file = codecs.open('%s/index.html' % docroot, encoding='utf-8', mode="w")
 	local_file.write(html)
 	local_file.close()
-
-#	post_picture = post.get('picture')
-#	if post_picture == None:
-		#print 'No pics yet :('
-#		picture = "picture=0"
-#	else:
-		#print 'yay we have pics at ' + post_picture
-#		file_hash = hashlib.sha224(post_picture).hexdigest()
-#		if os.path.exists('/tmp/' + file_hash + '.jpg') == False:
-			# Fetching first picture of post
-#			f_url = urllib.urlopen(post_picture)
-#			local_file = open('/tmp/' + file_hash + '.jpg', "w")
-#			local_file.write(f_url.read())
-#			local_file.close()
-#		picture = "picture=" + post_picture
-#		html = html + '<div><img src="' + 'file://' + '/tmp/' + file_hash + '.jpg"' + ' width="100" align="left"></div>'
