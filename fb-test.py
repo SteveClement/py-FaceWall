@@ -12,6 +12,7 @@ import os.path
 import hashlib
 import codecs
 import ConfigParser
+import twitter
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('facebook.cfg'))

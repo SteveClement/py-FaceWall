@@ -12,6 +12,8 @@ Dependencies
 * python-ConfigParser
 * python-urllib, python-urllib2
 
+* for twitter support: https://github.com/bear/python-twitter
+
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=SteveClement&url=https://github.com/SteveClement/py-FaceWall&title=Python FaceBook Wall and Printer&language=en_GB&tags=github&category=software) 
 
@@ -27,6 +29,9 @@ A config file must be named facebook.cfg and look like this:
 	[facebook]
 	app_id: myappid
 	app_secret: mysupersecret
+
+	[twitter]
+	enable: true
 	
 	[connection]
 	proxy_host:
