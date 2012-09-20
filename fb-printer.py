@@ -2,16 +2,29 @@
 # coding: utf-8
 
 import sys
-#sys.path.append("/Users/steve/Desktop/code/python-sdk/src/")
-sys.path.append("/home/steve/Desktop/code/python-sdk/src/")
+#sys.path.append("/Users/steve/Desktop/code/py-FaceWall/python-sdk/src/")
+sys.path.append("/home/os2012/work/py-FaceWall/python-sdk/src/")
 import facebook
 import urllib
-import urlparse
+import urllib2
 import subprocess
+import urlparse
 import random
 import os.path
 import hashlib
 import codecs
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.readfp(open('facebook.cfg'))
+app_id = config.get('facebook','app_id')
+app_secret = config.get('facebook','app_secret')
+feed_id = config.get('facebook','feed_id')
+try:
+	proxy_host = config.get('connection','proxy_host')
+	proxy_port = config.get('connection','proxy_port')
+except ConfigParser.NoOptionError:
+	proxy_host = ''
 
 def debug():
 	print '<!--'
@@ -33,29 +46,40 @@ html = """<html>
 
 #html = '<!-- Evil hack to get it working -->'
 
-# Parameters of your app and the id of the profile you want to mess with.
-FACEBOOK_APP_ID     = ''
-FACEBOOK_APP_SECRET = ''
+def getAccessToken():
+	""" Trying to get an access token. Very awkward. """
+	oauth_url = 'https://graph.facebook.com/oauth/access_token?'
 
-# Trying to get an access token. Very awkward.
-oauth_args = dict(client_id     = FACEBOOK_APP_ID,
-                  client_secret = FACEBOOK_APP_SECRET,
-                  grant_type    = 'client_credentials')
-oauth_curl_cmd = ['curl',
-                  'https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(oauth_args)]
-oauth_response = subprocess.Popen(oauth_curl_cmd,
-                                  stdout = subprocess.PIPE,
-                                  stderr = subprocess.PIPE).communicate()[0]
+	oauth_args = {
+			'client_id' : app_id,
+			'client_secret' : app_secret,
+			'grant_type'	: 'client_credentials'
+		}
+	params = urllib.urlencode(oauth_args)
 
-try:
-    oauth_access_token = urlparse.parse_qs(str(oauth_response))['access_token'][0]
-except KeyError:
-    print('Unable to grab an access token!')
-    exit()
+	if proxy_host:
+		proxies = {'http' : '%s:%s' % (proxy_host,proxy_port)}
+		proxy_support = urllib2.ProxyHandler(proxies)
+		opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler(debuglevel=9))
+		# HMPF.. 106 connection timed out
+	else:
+		opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))	
+
+	urllib2.install_opener(opener)
+	req = urllib2.Request(oauth_url,params)
+	oauth_response = urllib2.urlopen(req).read()
+
+	try:
+	    return urlparse.parse_qs(str(oauth_response))['access_token'][0]
+	except KeyError:
+	    print('Unable to grab an access token!')
+	    exit()
+
+oauth_access_token = getAccessToken()
 
 facebook_graph = facebook.GraphAPI(oauth_access_token)
 
-feed = facebook_graph.get_connections("205667706145726", "feed")
+feed = facebook_graph.get_connections(feed_id, "feed")
 
 post = feed["data"][0]
 

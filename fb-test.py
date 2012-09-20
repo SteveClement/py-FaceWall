@@ -2,7 +2,8 @@
 # coding: utf-8
 
 import sys
-#sys.path.append("/home/steve/Desktop/code/python-sdk/src/")
+#sys.path.append("/home/steve/Desktop/code/py-FaceWall/python-sdk/src/")
+sys.path.append("/home/os2012/work/py-FaceWall/python-sdk/src/")
 import facebook
 import urllib
 import urllib2
@@ -18,6 +19,7 @@ config = ConfigParser.ConfigParser()
 config.readfp(open('facebook.cfg'))
 app_id = config.get('facebook','app_id')
 app_secret = config.get('facebook','app_secret')
+feed_id = config.get('facebook','feed_id')
 try:
 	proxy_host = config.get('connection','proxy_host')
 	proxy_port = config.get('connection','proxy_port')
@@ -84,10 +86,9 @@ oauth_access_token = getAccessToken()
 
 facebook_graph = facebook.GraphAPI(oauth_access_token)
 
-feed = facebook_graph.get_connections("205667706145726", "feed")
-#feed = facebook_graph.get_connections("95283473324", "feed")
+feed = facebook_graph.get_connections(feed_id, "feed")
 
-rand_post = random.randint(0, 24)
+rand_post = random.randint(0, len(feed["data"]))
 post = feed["data"][rand_post]
 
 poster_name = unicode(post['from']['name'])
