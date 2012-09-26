@@ -13,18 +13,32 @@ import os.path
 import hashlib
 import codecs
 import ConfigParser
-import twitter
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('facebook.cfg'))
 app_id = config.get('facebook','app_id')
 app_secret = config.get('facebook','app_secret')
 feed_id = config.get('facebook','feed_id')
+
+try:
+	enable_twitter = config.get('twitter','enable')
+	if (enable_twitter):
+		import twitter
+		api = twitter.Api()
+		#api = twitter.Api(consumer_key='consumer_key', consumer_secret='consumer_secret', access_token_key='access_token', access_token_secret='access_token_secret')
+		search = api.Search('iPhone5')
+		print(search)
+		# https://dev.twitter.com/docs/api/1/get/search
+		
+except ConfigParser.NoOptionError:
+	enable_twitter = false
+
 try:
 	proxy_host = config.get('connection','proxy_host')
 	proxy_port = config.get('connection','proxy_port')
 except ConfigParser.NoOptionError:
 	proxy_host = ''
+	
 docroot = config.get('httpd','docroot')
 
 def debug():

@@ -11,7 +11,10 @@ Dependencies
 * [facebook-sdk](https://github.com/pythonforfacebook/facebook-sdk)
 * python-ConfigParser
 * python-urllib, python-urllib2
-* for twitter support: https://github.com/bear/python-twitter
+* for twitter support: 
+	** https://github.com/bear/python-twitter (OR maybe not)
+	** oauth2
+	** setuptools egg (all bundled)
 
 * nginx
 * If Dymo Label Writer is used: wget http://global.dymo.com/img/compel/xKpID6d3hOi6UrMXDNF4k6IlSMSm3E_0.gz -O dymo-cups-drivers-1.2.0.tar.gz OR wget http://www.dymo.com/media/Software/dymo-cups-drivers-1.2.0.tar.gz
