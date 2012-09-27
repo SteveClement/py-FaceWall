@@ -19,8 +19,17 @@ font-size:100px;
 font-family:"Arial", Helvetica, sans-serif;
 }
 
-#likes {position: absolute;
+#likes {
+	position: absolute;
 	top:320px;
 	right:20px;
 	left:20px;
+}
+
+#facebook {
+	float: left;
+}
+
+#twitter {
+	float: left;
 }

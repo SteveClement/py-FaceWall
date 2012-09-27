@@ -1,0 +1,24 @@
+{"created_at":"Wed, 19 Sep 2012 08:37:29 +0000",
+
+"entities":{"hashtags":[],"urls":[{"url":"http:\/\/t.co\/iXf9Hfx0","expanded_url":"http:\/\/www.onsteitsch.lu\/","display_url":"onsteitsch.lu","indices":[90,110]},{"url":"http:\/\/t.co\/nXc3pF7W","expanded_url":"http:\/\/fb.me\/1Vqxc2UJy","display_url":"fb.me\/1Vqxc2UJy","indices":[111,131]}],"user_mentions":[]},
+
+
+"from_user":"snj_lu",
+"from_user_id":42939463,
+"from_user_id_str":"42939463",
+"from_user_name":"SNJ.lu",
+"geo":null,"id":248340018857394177,
+
+"id_str":"248340018857394177",
+"iso_language_code":"de",
+"metadata":{"result_type":"recent"},
+"profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/234909390\/logo_normal.jpg",
+"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/234909390\/logo_normal.jpg",
+
+"source":"&lt;a href=&quot;http:\/\/www.facebook.com\/twitter&quot;&gt;Facebook&lt;\/a&gt;",
+"text":"Nach 10 Deeg bis den On St\u00e9itsch...de Countdown leeft!\nVergiesst net d\u00ebs S\u00e4it ze liken ;)\nhttp:\/\/t.co\/iXf9Hfx0 http:\/\/t.co\/nXc3pF7W",
+
+"to_user":null,
+"to_user_id":0,
+"to_user_id_str":"0",
+"to_user_name":null}

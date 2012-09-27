@@ -40,6 +40,11 @@ Edit facebook.cfg
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=SteveClement&url=https://github.com/SteveClement/py-FaceWall&title=Python FaceBook Wall and Printer&language=en_GB&tags=github&category=software) 
 
+TODO
+====
+
+* Merge fb-web and fb-printer, the only differing thing is the html/text output.
+
 Release notes
 =============
 
@@ -56,6 +61,7 @@ A config file must be named facebook.cfg and look like this:
 
 	[twitter]
 	enable: true
+	search: pywall
 
 	[connection]
 	proxy_host:
@@ -63,3 +69,20 @@ A config file must be named facebook.cfg and look like this:
 	
 	[httpd]
 	docroot: /usr/share/nginx/www
+	
+	
+References
+==========
+
+Facebook API
+------------
+
+https://developers.facebook.com/docs/reference/api/message/
+https://developers.facebook.com/docs/reference/api/event/
+https://developers.facebook.com/tools/explorer?method=GET&path=145312148944967%2Ffeed%3Ffields%3Dmessage%2Cid%2Cobject_id	
+
+
+Twitter API
+-----------
+
+https://dev.twitter.com/docs/api/1/get/search
