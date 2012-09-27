@@ -67,7 +67,6 @@ def getAccessToken():
 
 
 def getFbPost():
-	""" Random post! <-- watch out for that when/if merging with fb-printer """
 	app_id = config.get('facebook','app_id')
 	app_secret = config.get('facebook','app_secret')
 	feed_id = config.get('facebook','feed_id')
@@ -124,7 +123,6 @@ def getFbPost():
 
 	
 def getTweets():
-	""" Random tweet <-- watch out for that when/if merging with fb-printer"""
 	search_term = config.get('twitter','search')
 	url = 'http://search.twitter.com/search.json'
 	search_args = {
