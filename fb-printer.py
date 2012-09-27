@@ -92,12 +92,12 @@ if os.path.exists('/tmp/' + poster_id + '.jpg') == False:
 
 
 def getFbPost():
+	""" Difference between this and fb-web is that we don't use a random post but the last one"""
 	oauth_access_token = getAccessToken()
 
 	facebook_graph = facebook.GraphAPI(oauth_access_token)
 	feed = facebook_graph.get_connections(feed_id, "feed")
-	rand_post = random.randint(0, len(feed["data"]) - 1) 
-	post = feed["data"][rand_post]
+	post = feed["data"][0]
 
 	poster_name = unicode(post['from']['name'])
 	poster_id = post['from']['id']
@@ -122,23 +122,7 @@ def fetchPosterPicture(poster_id):
 
 
 def getTweets():
-	try:
-		enable_twitter = config.get('twitter','enable')
-		if (enable_twitter):
-			search_term = config.get('twitter','search')
-			url = 'http://search.twitter.com/search.json'
-			search_args = {
-				'q' : search_term,
-				'result_type' : 'mixed',
-				'show_user' : True,
-				'include_entities' : True
-				}
-			search_params = urllib.urlencode(search_args)
-			res = urllib2.urlopen(url, search_params).read()
-			print(res)
-		
-	except ConfigParser.NoOptionError:
-		enable_twitter = false
+
 
 		
 def writeHtmlHeader():
@@ -167,9 +151,11 @@ def writeHtml(html, poster_id, poster_name, post):
 		#print 'No message in post :('
 		message = "0"
 	elif os.path.exists('/tmp/' + post_hash + '.txt') == False:
+		""" Don't print if we already printed this """
 		#print 'Message in Post: ' + unicode(post_message)
 		#message = poster_name + " - " + unicode(post_message)
 		#print message
+		
 		local_file = codecs.open('/tmp/' + post_hash + '.txt', encoding='utf-8', mode="w")
 		local_file.write(post_message)
 		local_file.close()

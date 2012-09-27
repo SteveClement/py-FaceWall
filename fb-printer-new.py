@@ -23,13 +23,6 @@ try:
 except ConfigParser.NoOptionError:
 	proxy_host = ''
 	
-try:	
-	docroot = config.get('httpd','docroot')
-	if docroot[-1] != '/':
-		docroot += '/'
-except ConfigParser.NoOptionError:
-	exit(1, 'You need to specify docroot in the config file!')	
-	
 try:
 	enable_twitter = config.get('twitter','enable')
 	enable_twitter = True if enable_twitter == "true" else False
@@ -74,7 +67,7 @@ def getAccessToken():
 
 
 def getFbPost():
-	""" Select a random facebook post! """
+	""" Random post! <-- watch out for that when/if merging with fb-printer """
 	app_id = config.get('facebook','app_id')
 	app_secret = config.get('facebook','app_secret')
 	feed_id = config.get('facebook','feed_id')
@@ -83,43 +76,55 @@ def getFbPost():
 
 	facebook_graph = facebook.GraphAPI(oauth_access_token)
 	feed = facebook_graph.get_connections(feed_id, "feed")
-	rand_post = random.randint(0, len(feed["data"]) - 1) 
-	post = feed["data"][rand_post]
+	post = feed["data"][0]
 
 	poster_name = unicode(post['from']['name'])
 	poster_id = post['from']['id']
-	poster_picture_url = 'http://graph.facebook.com/' + poster_id + '/picture?type=large'
-	fetchPosterPicture(poster_picture_url, poster_id)
+	#profile_picture = "profile_picture=" + poster_picture_url 
+	#poster_picture_url = 'http://graph.facebook.com/' + poster_id + '/picture?type=large'
+	#fetchPosterPicture(poster_picture_url, poster_id)
 	
-	html = '<div id="facebook" class="norm"><img src="' + unicode(poster_id) + '.jpg" alt="Profile Picture of Poster"' + ' width="100" align="left">'
-	html += '<br/>\n'
-	html += poster_name + ': \n'
-	html += '</div>\n<br/>\n'
+	#html += '<div style="float:left; "><img src="' + 'file://' + '/tmp/' + poster_id + '.jpg"' + ' width="100" align="left"></div>'
+	#html += '<br />\n'
+	#html += '<font size="3" face="arial" color="black"> ' + unicode(poster_name) + u' schréift: </font>'
+	#html += '<br />\n'
 	
 	post_message = post.get('message')
+	post_hash = hashlib.sha224(repr(post_message)).hexdigest()
 	if post_message == None:
-		print 'No message in post :('
+		#print 'No message in post :('
 		message = "0"
-	else:
-		html = html + '  <div id="message" style="margin:0 20% 0 30% " class="header">' + unicode(post_message) + '</div>\n'
-
+	elif os.path.exists('/tmp/' + post_hash + '.txt') == False:
+		""" Don't print if we already printed this (at least until /tmp gets cleaned up ;)) """		
+		local_file = codecs.open('/tmp/' + post_hash + '.txt', encoding='utf-8', mode="w")
+		local_file.write(post_message)
+		local_file.close()
+		
 		post_likes = post.get('likes')
 		if post_likes == None:
 			likes = "0"
-			html += '<div id="likes" class="likes"><img src="thumbs-down.png" alt="Like Thumbs-up" height="100" align="top"><br >:(</div>'
-			html += '</div>\n'
 		else:
-			#print 'yay we have ' + unicode(post_likes['count']) + ' likes'
 			likes = unicode(post_likes['count'])
-			html += '\n'
-			html = html + '    <div id="likes" class="likes"><img src="thumbs-up.png" alt="Like Thumbs-up" height="100" align="top"><br >' + unicode(post_likes['count']) + '</div>\n'
+			#html += '<div><img src="file:///tmp/thumbs-up.png" width="100" align="absmiddle"> <font size="7" face="arial" color="#5a749f">' + unicode(post_likes['count']) + '</font></div>\n'
 			
-		html += '</div>\n<br/>\n'
-	return html
-	
+		if ( len(post_message) > 324 ):
+			message = post_message[0:324] + u'...'
+		else:
+			message = post_message
+			
+		message = message + u' \n'
+		message = message + u'www.bee-secure.lu/beefair\n'
+		message = message + u' \n'
+		message = message + u'Live vu FaceBook vum: ' + poster_name
+		print message
+		return message
+	else:
+		print("message already printed")
+		exit(0)
+
 	
 def getTweets():
-	""" Select a random tweet from a search"""
+	""" Random tweet <-- watch out for that when/if merging with fb-printer"""
 	search_term = config.get('twitter','search')
 	url = 'http://search.twitter.com/search.json'
 	search_args = {
@@ -134,71 +139,64 @@ def getTweets():
 	
 	rand_tweet = random.randint(0, len(jdict['results']) - 1) 
 	tweet = jdict['results'][rand_tweet]
+	#fetchPicture(tweet['profile_image_url'], tweet['from_user_id_str'])
 	
-	fetchPicture(tweet['profile_image_url'], tweet['from_user_id_str'])
-	
-	""" Write html for a tweet"""
-	html = '<div id="twitter" class="norm"><img src="' + unicode(tweet['from_user_id_str']) + '.jpg" alt="Profile Picture of Poster"' + ' width="100" align="left">'
-	html += '<br/>\n'
-	html += tweet['from_user'] + ': '
-	html += '\n</div>\n<br/>'
-
-	html += '<div id="message" style="margin:0 20% 0 30% " class="header">' + unicode(tweet['text']) + '</div>\n'
-	
-	print(tweet['from_user'],tweet['from_user_id_str'],tweet['text'])
-	return html
+	post_message = tweet['text']
+	post_hash = hashlib.sha224(repr(post_message)).hexdigest()
+	if post_message == None:
+		#print 'No message in post :('
+		message = "0"
+	elif os.path.exists('/tmp/' + post_hash + '.txt') == False:
+		""" Don't print if we already printed this (at least until /tmp gets cleaned up ;)) """		
+		local_file = codecs.open('/tmp/' + post_hash + '.txt', encoding='utf-8', mode="w")
+		local_file.write(post_message)
+		local_file.close()
+		
+		if ( len(post_message) > 324 ):
+			message = post_message[0:324] + u'...'
+		else:
+			message = post_message
+			
+		message = message + u' \n'
+		message = message + u'www.bee-secure.lu/beefair\n'
+		message = message + u' \n'
+		message = message + u'Live vun Twitter vum: @' + tweet['from_user']
+		print message
+		print(tweet['from_user'],tweet['from_user_id_str'],tweet['text'])
+		return message
+	else:
+		print("message already printed")
+		exit(0)
 		
 	
 def fetchPicture(picture_url, poster_id):
 	""" Simply fetch a file if it doesn't yet exist and store it under the docroot directory """
 	# Fetching Picture of poster
-	if os.path.exists(docroot + poster_id + '.jpg') == False:
+	if os.path.exists('/tmp/' + poster_id + '.jpg') == False:
 		f_url = urllib2.urlopen(picture_url)
-		local_file = open(docroot + poster_id + '.jpg', "w")
+		local_file = open('/tmp/' + poster_id + '.jpg', "w")
 		local_file.write(f_url.read())
 		local_file.close()
-		
-			
-def writeHtmlHeader():
-	""" Generating HTML Headers """
-	html = u"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-		   "http://www.w3.org/TR/html4/loose.dtd">
-	<html>
-	<head>
-	  <title>BEE SECURE On Stéitsch Live FaceBook Wall</title>
-	  <meta http-equiv="refresh" content="10" >
-	  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-	  <link rel="stylesheet" type="text/css" href="main.css" >
-	</head>
-
-	<body>
-
-	<div id="wrap">
-	  <div id="header"><p class="header"><img src="header-logo.png" alt="Logo BEE SECURE" height="47" style="vertical-align: middle">On St&eacute;itsch Live FaceBook Wall</p></div>
-	  <br >
-	"""
-	return html
 
 
-
-def writeHtmlFooter(html):
-	html += '\n</body>\n</html>\n'
-	local_file = codecs.open('%s/index.html' % docroot, encoding='utf-8', mode="w")
-	local_file.write(html)
+def writeMessageToFile(message):
+	local_file = codecs.open('print.txt', encoding='utf-8', mode="w")
+	local_file.write(message)
 	local_file.close()
 
 
 def main():
-	html = writeHtmlHeader()
 	
-	if enable_fb != False:
-		html += getFbPost()
+	# Twitter or Facebook, what should we hit?
+	rand = random.randint(1,2)
 		
-	
-	if enable_twitter != False:
-		html += getTweets()
+	if enable_fb != False and (enable_twitter == False or rand == 1):
+		message = getFbPost()
 		
-	writeHtmlFooter(html)
+	if enable_twitter != False and (enable_fb == False or rand == 2):
+		message = getTweets()
+		
+	writeMessageToFile(message)
 	
 	
 if __name__ == "__main__":

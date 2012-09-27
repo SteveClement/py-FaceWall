@@ -1,0 +1,16 @@
+[facebook]
+enable: false
+app_id:
+app_secret:
+feed_id:
+
+[twitter]
+enable: true
+search: 
+
+[httpd]
+docroot: 
+
+[connection]
+proxy_host:
+proxy_port:
