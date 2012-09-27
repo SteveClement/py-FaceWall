@@ -140,7 +140,7 @@ def getTweets():
 	""" Write html for a tweet"""
 	html = '<div id="twitter" class="norm"><img src="' + unicode(tweet['from_user_id_str']) + '.jpg" alt="Profile Picture of Poster"' + ' width="100" align="left">'
 	html += '<br/>\n'
-	html += tweet['from_user'] + ': '
+	html += '@' + tweet['from_user'] + ': '
 	html += '\n</div>\n<br/>'
 
 	html += '<div id="message" style="margin:0 20% 0 30% " class="header">' + unicode(tweet['text']) + '</div>\n'
@@ -165,7 +165,7 @@ def writeHtmlHeader():
 		   "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
 	<head>
-	  <title>BEE SECURE On Stéitsch Live FaceBook Wall</title>
+	  <title>BEE SECURE On Stéitsch Live FaceBook & Twitter Wall</title>
 	  <meta http-equiv="refresh" content="10" >
 	  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 	  <link rel="stylesheet" type="text/css" href="main.css" >
@@ -174,7 +174,7 @@ def writeHtmlHeader():
 	<body>
 
 	<div id="wrap">
-	  <div id="header"><p class="header"><img src="header-logo.png" alt="Logo BEE SECURE" height="47" style="vertical-align: middle">On St&eacute;itsch Live FaceBook Wall</p></div>
+	  <div id="header"><p class="header"><img src="header-logo.png" alt="Logo BEE SECURE" height="47" style="vertical-align: middle">On St&eacute;itsch Live FaceBook & Twitter Wall</p></div>
 	  <br >
 	"""
 	return html

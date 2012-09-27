@@ -1,6 +1,6 @@
 while [ true ]; do
 
-./fb-printer.py
+./fb-printer-new.py
 
 if [ -e print.txt ]; then
   # Use this line for printing to a Named Printer
