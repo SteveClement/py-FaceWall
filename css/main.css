@@ -1,35 +1,51 @@
-.header
-{
-color:black;
-font-size:47px;
-font-family:"Arial", Helvetica, sans-serif;
+.header {
+	color:black;
+	font-size:47px;
+	font-family:"Arial", Helvetica, sans-serif;
+	padding: 10px;
 }
 
-.norm
-{
-color:black;
-font-size:25px;
-font-family:"Arial", Helvetica, sans-serif;
+.norm {
+	color:black;
+	font-size:25px;
+	font-family:"Arial", Helvetica, sans-serif;
+	margin-left: 10px;
+	margin-top: 20px;
 }
 
-.likes
-{
-color:#5a749f;
-font-size:100px;
-font-family:"Arial", Helvetica, sans-serif;
+.likes {
+	color:#5a749f;
+	font-size:100px;
+	font-family:"Arial", Helvetica, sans-serif;
+}
+
+.sm {
+	float: left;
+	width: 100%;
+}
+
+.message {
+	float:left;
+	margin:0 10% 0 15%;
+	max-width: 50%;
 }
 
 #likes {
-	position: absolute;
-	top:320px;
-	right:20px;
-	left:20px;
+	/*position: absolute;*/
+	right:30px;
 }
 
 #facebook {
-	float: left;
+	margin-bottom: 20px;
+	border: 1px dashed yellow;
+	background-color: #F5F6CE;
 }
 
 #twitter {
-	float: left;
+	border: 1px dashed blue;
+	background-color: #81F7F3;
+}
+
+#wrap {
+	margin: 10px;
 }

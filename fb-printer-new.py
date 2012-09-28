@@ -39,6 +39,8 @@ except ConfigParser.NoOptionError:
 def getAccessToken():
 	""" Trying to get an access token. Very awkward. """
 	oauth_url = 'https://graph.facebook.com/oauth/access_token?'
+	app_id = config.get('facebook','app_id')
+	app_secret = config.get('facebook','app_secret')
 
 	oauth_args = {
 			'client_id' : app_id,
@@ -46,18 +48,7 @@ def getAccessToken():
 			'grant_type'	: 'client_credentials'
 		}
 	params = urllib.urlencode(oauth_args)
-
-	if proxy_host:
-		proxies = {'http' : '%s:%s' % (proxy_host,proxy_port)}
-		proxy_support = urllib2.ProxyHandler(proxies)
-		opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler(debuglevel=9))
-		# (dr) HMPF.. 106 connection timed out
-	else:
-		opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))	
-
-	urllib2.install_opener(opener)
-	req = urllib2.Request(oauth_url,params)
-	oauth_response = urllib2.urlopen(req).read()
+	oauth_response = urllib2.urlopen(oauth_url,params).read()
 
 	try:
 	    return urlparse.parse_qs(str(oauth_response))['access_token'][0]
@@ -67,10 +58,7 @@ def getAccessToken():
 
 
 def getFbPost():
-	app_id = config.get('facebook','app_id')
-	app_secret = config.get('facebook','app_secret')
 	feed_id = config.get('facebook','feed_id')
-	
 	oauth_access_token = getAccessToken()
 
 	facebook_graph = facebook.GraphAPI(oauth_access_token)
@@ -83,11 +71,7 @@ def getFbPost():
 	#poster_picture_url = 'http://graph.facebook.com/' + poster_id + '/picture?type=large'
 	#fetchPosterPicture(poster_picture_url, poster_id)
 	
-	#html += '<div style="float:left; "><img src="' + 'file://' + '/tmp/' + poster_id + '.jpg"' + ' width="100" align="left"></div>'
-	#html += '<br />\n'
-	#html += '<font size="3" face="arial" color="black"> ' + unicode(poster_name) + u' schréift: </font>'
-	#html += '<br />\n'
-	
+	post_id = post.get('id')
 	post_message = post.get('message')
 	post_hash = hashlib.sha224(repr(post_message)).hexdigest()
 	if post_message == None:
@@ -104,7 +88,6 @@ def getFbPost():
 			likes = "0"
 		else:
 			likes = unicode(post_likes['count'])
-			#html += '<div><img src="file:///tmp/thumbs-up.png" width="100" align="absmiddle"> <font size="7" face="arial" color="#5a749f">' + unicode(post_likes['count']) + '</font></div>\n'
 			
 		if ( len(post_message) > 324 ):
 			message = post_message[0:324] + u'...'
@@ -118,7 +101,7 @@ def getFbPost():
 		print message
 		return message
 	else:
-		print("message already printed")
+		print("facebook post %s already printed" % post_id)
 		exit(0)
 
 	
@@ -140,6 +123,7 @@ def getTweets():
 	#fetchPicture(tweet['profile_image_url'], tweet['from_user_id_str'])
 	
 	post_message = tweet['text']
+	post_id = tweet['id_str']
 	post_hash = hashlib.sha224(repr(post_message)).hexdigest()
 	if post_message == None:
 		#print 'No message in post :('
@@ -160,10 +144,10 @@ def getTweets():
 		message = message + u' \n'
 		message = message + u'Live vun Twitter vum: @' + tweet['from_user']
 		print message
-		print(tweet['from_user'],tweet['from_user_id_str'],tweet['text'])
+		#print(tweet['from_user'],tweet['from_user_id_str'],tweet['text'])
 		return message
 	else:
-		print("message already printed")
+		print("twitter post %s already printed" % post_id)
 		exit(0)
 		
 	
