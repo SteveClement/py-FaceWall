@@ -2,7 +2,7 @@ while [ true ]; do
 
 ./fb-web.py
 
-echo "Sleeping for 10 seconds..."
+echo "Sleeping for 8 seconds..."
 
-sleep 10
+sleep 8
 done

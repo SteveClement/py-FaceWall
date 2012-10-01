@@ -110,7 +110,7 @@ def getTweets():
 	url = 'http://search.twitter.com/search.json'
 	search_args = {
 		'q' : search_term,
-		'result_type' : 'mixed',
+		'result_type' : 'recent',	# mixed, popular
 		'show_user' : True
 		#'include_entities' : True	# includes info about hashtags, etc
 		}
@@ -139,10 +139,11 @@ def getTweets():
 		else:
 			message = post_message
 			
-		message = message + u' \n'
-		message = message + u'www.bee-secure.lu/beefair\n'
-		message = message + u' \n'
-		message = message + u'Live vun Twitter vum: @' + tweet['from_user']
+		message += u' \n\n'
+		message += u'www.bee-secure.lu/beefair\n'
+		message += u' \n'
+		#message = message + u'Live um ' + tweet['created_at'][17:25] + ' vun Twitter vum: @' + tweet['from_user']
+		message += u'Twitter #onsteitsch \n' + u'@' + tweet['from_user'] + ' ' + tweet['created_at'][17:22] + u'h'
 		print message
 		#print(tweet['from_user'],tweet['from_user_id_str'],tweet['text'])
 		return message
@@ -170,7 +171,9 @@ def writeMessageToFile(message):
 def main():
 	
 	# Twitter or Facebook, what should we hit?
+	#source = 1
 	rand = random.randint(1,2)
+	#source = 1 if source == 2 else 1
 		
 	if enable_fb != False and (enable_twitter == False or rand == 1):
 		message = getFbPost()
